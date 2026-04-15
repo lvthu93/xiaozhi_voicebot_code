@@ -4,7 +4,7 @@ USING:
 
 Command:
 
-sh -c "$(wget -qO- https://raw.githubusercontent.com/lvthu93/xiaozhi_voicebot_code/main/xiaozhi.sh)" -- 98:bb:99:3f:XX:XX
+sh -c "$(wget -qO- https://github.com/lvthu93/xiaozhi_voicebot_code/raw/main/xiaozhi.sh)" -- 98:bb:99:3f:XX:XX
 ----------------------------------------------------------------------------------------------------------------------------------
 # Nếu chưa biết Mac Address:
 
@@ -12,7 +12,7 @@ IP Default: 192.168.43.1:5555 (dùng khi giữ nút Loa 10s)
 
 Command:
 
-sh -c "$(wget -qO- https://raw.githubusercontent.com/lvthu93/xiaozhi_voicebot_code/main/auto.sh)" -- 192.168.43.1:5555
+sh -c "$(wget -qO- https://github.com/lvthu93/xiaozhi_voicebot_code/raw/main/auto.sh)" -- 192.168.43.1:5555
 ----------------------------------------------------------------------------------------------------------------------------------
 # NOTE
 - Có thể sử dụng trong môi trường linux (WSL, iSH Shell, Termux, MacOS, Ubuntu...)
