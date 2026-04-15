@@ -20,8 +20,12 @@ sh -c "$(wget -qO- https://github.com/lvthu93/xiaozhi_voicebot_code/raw/main/aut
 - Có thể sử dụng trong môi trường linux (WSL, iSH Shell, Termux, MacOS, Ubuntu...)
 - auto.sh sẽ tự lấy IP default nếu không thêm IP cuối hàm
 - ABD trên iSH Shell thường hay disconnect. Có thể phải tìm mac thủ công trong Modem / Router phần DHCP Client.
+- Nếu không có các môi trường kia thì có thể tải file "xiaozhi.ps1" lưu vào ổ C:/ và mở powershell ở chế độ Admin để lấy CODE
 
+    powershell -ExecutionPolicy Bypass -File .\xiaozhi.ps1 98:bb:99:3f:76:d9
+  
 ----------------------------------------------------------------------------------------------------------------------------------
+# BONUS
 
 #Get Mac Address
 
