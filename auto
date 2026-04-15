@@ -1,9 +1,18 @@
 #!/bin/sh
 
 # ===== CONFIG =====
-TARGET="192.168.43.1:5555"
+DEFAULT_TARGET="192.168.43.1:5555"
 PY_FILE="xiaozhi.py"
-PY_URL="https://raw.githubusercontent.com/lvthu93/xiaozhi_voicebot_code/main/xiaozhi.py"
+PY_URL="https://raw.githubusercontent.com/lvthu93/xiaozhi_voicebot_apk_Decompiler/main/xiaozhi.py"
+
+# ===== INPUT TARGET =====
+if [ -n "$1" ]; then
+    TARGET="$1"
+else
+    TARGET="$DEFAULT_TARGET"
+fi
+
+echo "🎯 Target: $TARGET"
 
 # ===== CHECK TOOL =====
 command -v adb >/dev/null 2>&1 || { echo "❌ adb chưa cài"; exit 1; }
@@ -17,14 +26,14 @@ fi
 
 # ===== CONNECT ADB =====
 echo "🔌 Kết nối ADB..."
-adb connect $TARGET >/dev/null 2>&1
+adb connect "$TARGET" >/dev/null 2>&1
 
 # ===== GET MAC =====
-MAC=$(adb -s $TARGET shell cat /sys/class/net/wlan0/address 2>/dev/null | tr 'a-z' 'A-Z' | tr -d '\r')
+MAC=$(adb -s "$TARGET" shell cat /sys/class/net/wlan0/address 2>/dev/null | tr 'a-z' 'A-Z' | tr -d '\r')
 
 # fallback
 if [ -z "$MAC" ]; then
-    MAC=$(adb -s $TARGET shell ip link show wlan0 2>/dev/null | grep link/ether | awk '{print $2}' | tr 'a-z' 'A-Z')
+    MAC=$(adb -s "$TARGET" shell ip link show wlan0 2>/dev/null | grep link/ether | awk '{print $2}' | tr 'a-z' 'A-Z')
 fi
 
 if [ -z "$MAC" ]; then
@@ -34,7 +43,7 @@ fi
 
 echo "📡 MAC: $MAC"
 
-# ===== PATCH PYTHON (thêm CLI nếu chưa có) =====
+# ===== PATCH PYTHON =====
 grep -q "sys.argv" "$PY_FILE" || cat >> "$PY_FILE" << 'EOF'
 
 import sys
