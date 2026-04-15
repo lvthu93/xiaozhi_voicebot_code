@@ -3,7 +3,7 @@
 # ===== INPUT =====
 TARGET="${1:-192.168.43.1:5555}"
 COUNT=0
-RECONNECT=5
+RECONNECT=10
 
 # ===== ADB CONNECT =====
 
