@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WiFi Setup - AI BOX PLUS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #0b0f19 0%, #1a1f2e 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+        
+        .header h1 {
+            color: #fff;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            color: #94a3b8;
+            font-size: 14px;
+        }
+        
+        .card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .card-title h3 {
+            color: #fff;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+        
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        
+        .btn-success {
+            background: #10b981;
+            color: #fff;
+        }
+        
+        .btn-success:hover {
+            background: #059669;
+        }
+        
+        .btn-warning {
+            background: #f59e0b;
+            color: #fff;
+        }
+        
+        .btn-warning:hover {
+            background: #d97706;
+        }
+        
+        .btn-danger {
+            background: #ef4444;
+            color: #fff;
+        }
+        
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+        
+        .status-box {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            background: rgba(15, 23, 42, 0.5);
+        }
+        
+        .status-box.warning {
+            border-color: rgba(234, 179, 8, 0.3);
+            background: rgba(113, 63, 18, 0.2);
+        }
+        
+        .status-box h4 {
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .status-box p {
+            color: #cbd5e1;
+            font-size: 11px;
+        }
+        
+        .form-group {
+            margin-bottom: 12px;
+        }
+        
+        .form-group label {
+            display: block;
+            color: #cbd5e1;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        
+        input[type="text"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: 10px 12px;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+        
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        
+        input::placeholder {
+            color: #64748b;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+        }
+        
+        .btn-group .btn {
+            flex: 1;
+        }
+        
+        .network-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 12px;
+        }
+        
+        .network-item {
+            padding: 10px;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .network-item:hover {
+            background: rgba(15, 23, 42, 0.7);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+        
+        .network-item .name {
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .network-item .info {
+            color: #94a3b8;
+            font-size: 11px;
+        }
+        
+        .loading {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 12px;
+            padding: 20px;
+        }
+        
+        .error {
+            color: #ef4444;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+        
+        .success {
+            color: #10b981;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+        
+        .divider {
+            height: 1px;
+            background: rgba(99, 102, 241, 0.2);
+            margin: 20px 0;
+        }
+        
+        .saved-network {
+            padding: 8px;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            border-radius: 6px;
+            margin-bottom: 6px;
+            font-size: 12px;
+            color: #cbd5e1;
+        }
+        
+        .icon {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            text-align: center;
+            line-height: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>AI BOX PLUS</h1>
+            <p>WiFi Setup</p>
+        </div>
+        
+        <!-- AP Mode Status -->
+        <div id="wifiApStatus" class="card status-box warning" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span class="icon">📡</span>
+                    <div>
+                        <h4>AP Mode Active</h4>
+                        <p id="wifiApInfo">SSID: Phicomm-R1</p>
+                    </div>
+                </div>
+                <button onclick="stopAp()" class="btn btn-danger">Tắt AP</button>
+            </div>
+        </div>
+        
+        <!-- WiFi Setup Card -->
+        <div class="card">
+            <div class="card-title">
+                <h3>📶 WiFi Setup</h3>
+            </div>
+            
+            <!-- Connect Form -->
+            <div>
+                <div class="form-group">
+                    <label>SSID</label>
+                    <input type="text" id="wifiSsidInput" placeholder="Tên mạng WiFi">
+                </div>
+                <div class="form-group">
+                    <label>Mật khẩu</label>
+                    <input type="password" id="wifiPasswordInput" placeholder="Nhập mật khẩu">
+                </div>
+                <div class="form-group">
+                    <label>Loại bảo mật</label>
+                    <select id="wifiSecurityType">
+                        <option value="wpa">WPA/WPA2</option>
+                        <option value="wep">WEP</option>
+                        <option value="open">Open (không mật khẩu)</option>
+                    </select>
+                </div>
+                <div class="btn-group">
+                    <button onclick="connect()" class="btn btn-success" style="width: 100%;">🔗 Kết nối</button>
+                </div>
+                <div id="connectMessage"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/utils/logger.js"></script>
+    <script src="js/connections/AiboxPlusConnection.js"></script>
+    <script src="js/managers/WifiManager.js"></script>
+    <script>
+        // Initialize WebSocket connection
+        let aiboxPlus = null;
+        let wifiManager = null;
+        
+        // Global functions for onclick handlers
+        function connect() {
+            if (wifiManager && wifiManager.aiboxPlus && wifiManager.aiboxPlus.isConnected) {
+                wifiManager.connect();
+                const msgEl = document.getElementById('connectMessage');
+                if (msgEl) msgEl.textContent = '';
+            } else {
+                const msgEl = document.getElementById('connectMessage');
+                if (msgEl) {
+                    msgEl.className = 'error';
+                    msgEl.textContent = 'Chưa kết nối WebSocket. Vui lòng đợi...';
+                }
+            }
+        }
+        
+        function stopAp() {
+            if (wifiManager && wifiManager.aiboxPlus && wifiManager.aiboxPlus.isConnected) {
+                wifiManager.stopAp();
+            }
+        }
+        
+        function updateApStatus(data) {
+            const statusEl = document.getElementById('wifiApStatus');
+            if (!statusEl) return;
+            
+            if (data.active) {
+                statusEl.style.display = 'block';
+                const infoEl = document.getElementById('wifiApInfo');
+                if (infoEl) {
+                    infoEl.textContent = `SSID: ${data.ssid || 'Phicomm-R1'}`;
+                }
+            } else {
+                statusEl.style.display = 'none';
+            }
+        }
+        
+        function init() {
+            // Get IP from current location
+            const hostname = window.location.hostname;
+            
+            console.log('Initializing WiFi Setup, connecting to:', hostname);
+            aiboxPlus = new AiboxPlusConnection();
+            wifiManager = new WifiManager(aiboxPlus);
+            
+            // Override onOpen
+            const originalOnOpen = aiboxPlus.onOpen.bind(aiboxPlus);
+            aiboxPlus.onOpen = function() {
+                originalOnOpen();
+                console.log('WebSocket connected');
+            };
+            
+            // Override onMessage để handle các event WiFi
+            const originalOnMessage = aiboxPlus.onMessage.bind(aiboxPlus);
+            aiboxPlus.onMessage = function(event) {
+                originalOnMessage(event);
+                
+                try {
+                    const data = JSON.parse(event.data);
+                    
+                    if (data.type === 'wifi_ap_status') {
+                        updateApStatus(data);
+                    } else if (data.type === 'wifi_connect_result') {
+                        const msgEl = document.getElementById('connectMessage');
+                        if (data.success) {
+                            msgEl.className = 'success';
+                            msgEl.textContent = 'Kết nối thành công! Chờ loa IP rồi hãy truy cập bằng IP đó';
+                        } else {
+                            msgEl.className = 'error';
+                            msgEl.textContent = 'Kết nối thất bại: ' + (data.message || 'Unknown error');
+                        }
+                    }
+                } catch (e) {
+                    // Ignore parse errors, original handler will deal with it
+                }
+            };
+            
+            // Connect với IP
+            aiboxPlus.connect(hostname);
+        }
+        
+        function connect() {
+            if (wifiManager) {
+                wifiManager.connect();
+                document.getElementById('connectMessage').textContent = '';
+            }
+        }
+        
+        function stopAp() {
+            if (wifiManager) {
+                wifiManager.stopAp();
+            }
+        }
+        
+        function getSaved() {
+            if (wifiManager) {
+                wifiManager.getSaved();
+            }
+        }
+        
+        // Không cần các hàm scan và display networks trong chế độ AP
+        
+        function displaySavedNetworks(networks) {
+            const listEl = document.getElementById('savedWifiList');
+            if (networks.length === 0) {
+                listEl.innerHTML = '<div class="loading">Chưa có WiFi nào được lưu</div>';
+                return;
+            }
+            
+            let html = '';
+            networks.forEach(network => {
+                html += `<div class="saved-network">${network.ssid}</div>`;
+            });
+            listEl.innerHTML = html;
+        }
+        
+        function updateApStatus(data) {
+            const statusEl = document.getElementById('wifiApStatus');
+            if (data.active) {
+                statusEl.style.display = 'block';
+                document.getElementById('wifiApInfo').textContent = `SSID: ${data.ssid || 'Phicomm-R1'}`;
+            } else {
+                statusEl.style.display = 'none';
+            }
+        }
+        
+        // Initialize on load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+</body>
+</html>
+

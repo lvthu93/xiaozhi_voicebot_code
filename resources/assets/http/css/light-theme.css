@@ -1,0 +1,721 @@
+/* ============================================
+   LIGHT THEME - Apple Design System 2025
+   Professional, Clean, Modern
+   ============================================ */
+
+/* ============================================
+   CSS VARIABLES - Apple Color Palette
+   ============================================ */
+[data-theme="light"] {
+    --bg-primary: #F5F5F7;
+    --bg-secondary: #FFFFFF;
+    --bg-tertiary: #FAFAFA;
+    --bg-hover: #EBEBED;
+    --text-primary: #1D1D1F;
+    --text-secondary: #6E6E73;
+    --text-tertiary: #86868B;
+    --border-light: #E5E5E7;
+    --border-medium: #D2D2D7;
+    --accent-blue: #007AFF;
+    --accent-cyan: #5AC8FA;
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* ============================================
+   BASE
+   ============================================ */
+[data-theme="light"] body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+/* ============================================
+   HEADER CONTAINER - Background trùng với màu nền
+   ============================================ */
+html[data-theme="light"] #header-container,
+html[data-theme="light"] div.sticky.top-0.z-50,
+html[data-theme="light"] div[class*="bg-\[#0b0f19\]"],
+html[data-theme="light"] div[class*="sticky"][class*="top-0"] {
+    background: var(--bg-primary) !important;
+    background-color: var(--bg-primary) !important;
+    background-image: none !important;
+}
+
+/* ============================================
+   NAVBAR - Completely Transparent (Highest Priority)
+   ============================================ */
+html[data-theme="light"] nav {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* Override any Tailwind bg classes */
+html[data-theme="light"] nav[class*="bg-"],
+html[data-theme="light"] nav[class*="bg-\["],
+html[data-theme="light"] nav[class*="backdrop"] {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* Force all child elements to be transparent */
+html[data-theme="light"] nav > *,
+html[data-theme="light"] nav > * > *,
+html[data-theme="light"] nav > * > * > * {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+}
+
+html[data-theme="light"] nav .text-white {
+    color: var(--text-primary) !important;
+    font-weight: 600;
+}
+
+[data-theme="light"] .bg-cyan-900\/30 {
+    background: rgba(90, 200, 250, 0.15) !important;
+    border-color: rgba(90, 200, 250, 0.3) !important;
+    color: #0071A4 !important;
+}
+
+[data-theme="light"] .bg-yellow-900\/30 {
+    background: rgba(255, 204, 0, 0.15) !important;
+    border-color: rgba(255, 204, 0, 0.3) !important;
+}
+
+[data-theme="light"] .text-yellow-400 {
+    color: #FF9500 !important;
+}
+
+/* ============================================
+   GLASS CARDS - Clean White Cards
+   ============================================ */
+[data-theme="light"] .glass-card {
+    background: var(--bg-secondary) !important;
+    border: 1px solid var(--border-light) !important;
+    box-shadow: var(--shadow-sm) !important;
+    backdrop-filter: none !important;
+}
+
+/* Remove border from glass-card containing EQ panel */
+[data-theme="light"] .glass-card:has(#panel-eq) {
+    border: 1px solid var(--border-light) !important;
+}
+
+/* Remove border/background from vertical-range inputs */
+[data-theme="light"] .vertical-range,
+[data-theme="light"] #panel-eq .vertical-range,
+[data-theme="light"] #panel-eq input[type="range"].vertical-range {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+[data-theme="light"] .glass-card:hover {
+    box-shadow: var(--shadow-md) !important;
+    border-color: var(--border-medium) !important;
+}
+
+[data-theme="light"] .glass-panel {
+    background: var(--bg-secondary) !important;
+    border: 1px solid var(--border-light) !important;
+    box-shadow: var(--shadow-xs) !important;
+    backdrop-filter: none !important;
+}
+
+/* ============================================
+   TABS
+   ============================================ */
+[data-theme="light"] .tab-inactive {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-secondary) !important;
+    border: none !important;
+}
+
+[data-theme="light"] .tab-inactive:hover {
+    background: var(--bg-hover) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Tabs inside cards */
+[data-theme="light"] .border-b.border-indigo-500\/20 {
+    border-color: var(--border-light) !important;
+}
+
+[data-theme="light"] #tab-songs.border-b-2.border-indigo-500 {
+    border-color: var(--accent-blue) !important;
+    color: var(--accent-blue) !important;
+}
+
+[data-theme="light"] #tab-playlist,
+[data-theme="light"] #tab-zing,
+[data-theme="light"] #tab-alarm {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="light"] #tab-playlist:hover,
+[data-theme="light"] #tab-zing:hover,
+[data-theme="light"] #tab-alarm:hover {
+    color: var(--text-primary) !important;
+}
+
+/* Audio Engine tabs */
+[data-theme="light"] .tab-btn {
+    color: var(--text-secondary) !important;
+    background: transparent !important;
+}
+
+[data-theme="light"] .tab-btn.active {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+    color: white !important;
+}
+
+[data-theme="light"] .tab-btn:hover:not(.active) {
+    color: var(--text-primary) !important;
+}
+
+/* Lighting tabs */
+[data-theme="light"] #ltab-edge {
+    color: var(--text-secondary) !important;
+    background: transparent !important;
+}
+
+[data-theme="light"] #ltab-edge:hover {
+    color: var(--text-primary) !important;
+}
+
+/* ============================================
+   MEDIA CARD
+   ============================================ */
+[data-theme="light"] .from-slate-800,
+[data-theme="light"] .via-indigo-900\/30,
+[data-theme="light"] .to-slate-900,
+[data-theme="light"] .from-slate-700,
+[data-theme="light"] .via-indigo-800\/20 {
+    background: linear-gradient(to bottom right, #F8F9FA, rgba(99, 102, 241, 0.06), #F5F5F7) !important;
+}
+
+[data-theme="light"] #albumArtContainer {
+    background: var(--bg-secondary) !important;
+    border-color: var(--border-light) !important;
+    box-shadow: var(--shadow-sm) !important;
+}
+
+[data-theme="light"] .text-indigo-400 {
+    color: #6366f1 !important;
+}
+
+[data-theme="light"] #trackTitle,
+[data-theme="light"] .text-white {
+    color: var(--text-primary) !important;
+    text-shadow: none !important;
+    font-weight: 600;
+}
+
+
+[data-theme="light"] .backdrop-blur-md.bg-black\/40 {
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-light) !important;
+    box-shadow: var(--shadow-xs) !important;
+}
+
+[data-theme="light"] .backdrop-blur-md.bg-black\/40:hover {
+    background: rgba(99, 102, 241, 0.08) !important;
+    color: #6366f1 !important;
+    border-color: rgba(99, 102, 241, 0.2) !important;
+    box-shadow: var(--shadow-sm) !important;
+}
+
+[data-theme="light"] .bg-white\/20 {
+    background: rgba(0, 0, 0, 0.06) !important;
+}
+
+[data-theme="light"] .text-white\/90 {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="light"] .from-black\/70 {
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.1), transparent) !important;
+}
+
+[data-theme="light"] #sourceBadge {
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-light) !important;
+    box-shadow: var(--shadow-xs) !important;
+}
+
+[data-theme="light"] .bg-slate-900\/50 {
+    background: var(--bg-tertiary) !important;
+}
+
+/* ============================================
+   INPUT FIELDS
+   ============================================ */
+[data-theme="light"] input[type="text"],
+[data-theme="light"] input[type="password"],
+[data-theme="light"] input[type="number"],
+[data-theme="light"] select,
+[data-theme="light"] textarea {
+    background: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-light) !important;
+}
+
+[data-theme="light"] input[type="text"]:hover,
+[data-theme="light"] input[type="password"]:hover,
+[data-theme="light"] input[type="number"]:hover,
+[data-theme="light"] select:hover {
+    border-color: var(--border-medium) !important;
+}
+
+[data-theme="light"] input[type="text"]:focus,
+[data-theme="light"] input[type="password"]:focus,
+[data-theme="light"] input[type="number"]:focus,
+[data-theme="light"] select:focus,
+[data-theme="light"] textarea:focus {
+    background: var(--bg-secondary) !important;
+    border-color: var(--accent-blue) !important;
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1) !important;
+    outline: none !important;
+}
+
+[data-theme="light"] input::placeholder,
+[data-theme="light"] textarea::placeholder {
+    color: var(--text-tertiary) !important;
+}
+
+[data-theme="light"] input[type="range"],
+[data-theme="light"] .bg-slate-700,
+[data-theme="light"] .bg-slate-600 {
+    background: var(--border-light) !important;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+[data-theme="light"] .bg-slate-800\/50,
+[data-theme="light"] .bg-slate-800\/40,
+[data-theme="light"] .bg-slate-800\/30,
+[data-theme="light"] .bg-slate-700\/60,
+[data-theme="light"] .bg-slate-700\/50,
+[data-theme="light"] .bg-slate-700\/40 {
+    background: var(--bg-tertiary) !important;
+    border-color: var(--border-light) !important;
+    color: var(--text-primary) !important;
+}
+
+[data-theme="light"] .bg-slate-800\/50:hover,
+[data-theme="light"] .bg-slate-800\/40:hover,
+[data-theme="light"] .bg-slate-800\/30:hover,
+[data-theme="light"] .bg-slate-700\/60:hover,
+[data-theme="light"] .bg-slate-700\/50:hover,
+[data-theme="light"] .bg-slate-700\/40:hover {
+    background: var(--bg-hover) !important;
+    border-color: var(--border-medium) !important;
+}
+
+[data-theme="light"] button.bg-slate-800\/50,
+[data-theme="light"] .bg-slate-800\/50 {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+}
+
+[data-theme="light"] button.bg-slate-800\/50:hover {
+    background: var(--bg-hover) !important;
+}
+
+[data-theme="light"] .bg-slate-700\/50 {
+    background: var(--bg-tertiary) !important;
+}
+
+[data-theme="light"] .bg-slate-700\/50:hover {
+    background: var(--bg-hover) !important;
+}
+
+[data-theme="light"] .disabled\:bg-slate-700,
+[data-theme="light"] button:disabled,
+[data-theme="light"] button.disabled {
+    background: var(--bg-tertiary) !important;
+    border-color: var(--border-light) !important;
+    color: var(--text-tertiary) !important;
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+[data-theme="light"] .disabled\:text-slate-400,
+[data-theme="light"] button:disabled,
+[data-theme="light"] button.disabled {
+    color: var(--text-tertiary) !important;
+}
+
+[data-theme="light"] .disabled\:shadow-none {
+    box-shadow: none !important;
+}
+
+/* ============================================
+   TEXT COLORS
+   ============================================ */
+[data-theme="light"] .text-slate-200,
+[data-theme="light"] .text-slate-300,
+[data-theme="light"] .text-slate-400,
+[data-theme="light"] .text-slate-500,
+[data-theme="light"] .text-slate-600 {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="light"] .text-white {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="light"] h1,
+[data-theme="light"] h2,
+[data-theme="light"] h3,
+[data-theme="light"] h4,
+[data-theme="light"] h5,
+[data-theme="light"] h6 {
+    color: var(--text-primary) !important;
+    font-weight: 600;
+}
+
+[data-theme="light"] .text-gray-300 {
+    color: var(--text-secondary) !important;
+}
+
+/* ============================================
+   BORDERS
+   ============================================ */
+[data-theme="light"] .border-indigo-500\/20,
+[data-theme="light"] .border-indigo-500\/30,
+[data-theme="light"] .border-indigo-500\/10 {
+    border-color: var(--border-light) !important;
+}
+
+[data-theme="light"] .border-red-800\/30 {
+    border-color: rgba(239, 68, 68, 0.3) !important;
+}
+
+[data-theme="light"] .border-yellow-500\/30 {
+    border-color: rgba(255, 204, 0, 0.3) !important;
+}
+
+/* ============================================
+   SWITCHES & TOGGLES
+   ============================================ */
+[data-theme="light"] .bg-slate-700.peer,
+[data-theme="light"] .bg-slate-700 {
+    background: var(--border-light) !important;
+}
+
+[data-theme="light"] .peer-checked\:bg-indigo-600 {
+    background: var(--accent-blue) !important;
+}
+
+/* ============================================
+   CARDS & PANELS
+   ============================================ */
+[data-theme="light"] .bg-slate-800\/40,
+[data-theme="light"] .bg-slate-800\/30 {
+    background: var(--bg-secondary) !important;
+    border-color: var(--border-light) !important;
+}
+
+
+[data-theme="light"] .bg-slate-800\/40:hover,
+[data-theme="light"] .bg-slate-800\/30:hover {
+    background: var(--bg-tertiary) !important;
+    border-color: var(--border-medium) !important;
+}
+
+[data-theme="light"] .bg-slate-900\/50 {
+    background: var(--bg-tertiary) !important;
+}
+
+[data-theme="light"] .bg-slate-800\/80 {
+    background: var(--bg-secondary) !important;
+    border-color: var(--border-light) !important;
+}
+
+/* ============================================
+   SYSTEM MONITOR
+   ============================================ */
+[data-theme="light"] .bg-slate-800 {
+    background: var(--border-light) !important;
+}
+
+[data-theme="light"] .bg-slate-600 {
+    background: #94a3b8 !important;
+}
+
+[data-theme="light"] .bg-red-900\/30 {
+    background: rgba(239, 68, 68, 0.1) !important;
+    border-color: rgba(239, 68, 68, 0.2) !important;
+    color: #DC2626 !important;
+}
+
+[data-theme="light"] .bg-red-900\/30:hover {
+    background: rgba(239, 68, 68, 0.15) !important;
+}
+
+[data-theme="light"] .text-red-400 {
+    color: #EF4444 !important;
+}
+
+[data-theme="light"] .text-red-300 {
+    color: #FCA5A5 !important;
+}
+
+/* ============================================
+   WIFI STATUS
+   ============================================ */
+[data-theme="light"] .bg-yellow-900\/20 {
+    background: rgba(255, 204, 0, 0.1) !important;
+}
+
+[data-theme="light"] .text-yellow-400 {
+    color: #FF9500 !important;
+}
+
+/* ============================================
+   ACTION BUTTONS
+   ============================================ */
+[data-theme="light"] .bg-green-600 {
+    background: #34C759 !important;
+}
+
+[data-theme="light"] .bg-green-600:hover {
+    background: #30D158 !important;
+}
+
+[data-theme="light"] .bg-yellow-600 {
+    background: #FF9500 !important;
+}
+
+[data-theme="light"] .bg-yellow-600:hover {
+    background: #FFB340 !important;
+}
+
+[data-theme="light"] .bg-purple-600 {
+    background: #AF52DE !important;
+}
+
+[data-theme="light"] .bg-purple-600:hover {
+    background: #BF5AF2 !important;
+}
+
+[data-theme="light"] .bg-red-600 {
+    background: #FF3B30 !important;
+}
+
+[data-theme="light"] .bg-red-600:hover {
+    background: #FF453A !important;
+}
+
+[data-theme="light"] .bg-red-900\/50 {
+    background: rgba(255, 59, 48, 0.1) !important;
+    border-color: rgba(255, 59, 48, 0.2) !important;
+    color: #FF3B30 !important;
+}
+
+[data-theme="light"] .bg-red-900\/50:hover {
+    background: rgba(255, 59, 48, 0.15) !important;
+}
+
+[data-theme="light"] .text-red-200 {
+    color: #FF3B30 !important;
+}
+
+/* ============================================
+   MODAL
+   ============================================ */
+[data-theme="light"] .bg-black\/60 {
+    background: rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="light"] #alarmModal .glass-card {
+    background: var(--bg-secondary) !important;
+    box-shadow: var(--shadow-lg) !important;
+}
+
+/* ============================================
+   CHAT
+   ============================================ */
+[data-theme="light"] #chatMessages {
+    background: var(--bg-tertiary) !important;
+}
+
+/* ============================================
+   PRESET BUTTONS
+   ============================================ */
+
+/* ============================================
+   LIGHTING
+   ============================================ */
+[data-theme="light"] .text-yellow-400 {
+    color: #FF9500 !important;
+}
+
+/* ============================================
+   ICONS - Ensure visibility and proper colors
+   ============================================ */
+/* FontAwesome icons - Preserve FontAwesome font-family */
+[data-theme="light"] i[class*="fa-"],
+[data-theme="light"] i.fa-solid,
+[data-theme="light"] i.fa-brands,
+[data-theme="light"] i.fa-regular,
+[data-theme="light"] .fa-solid,
+[data-theme="light"] .fa-brands,
+[data-theme="light"] .fa-regular,
+[data-theme="light"] [class*="fa-"] {
+    /* Preserve FontAwesome font-family - do not override */
+    font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands", "Font Awesome 6 Pro" !important;
+    font-weight: 900 !important;
+    -webkit-font-smoothing: antialiased;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    line-height: 1;
+}
+
+/* Headings with icons - preserve FontAwesome font */
+[data-theme="light"] h3.text-white i[class*="fa-"] {
+    font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands", "Font Awesome 6 Pro" !important;
+    font-weight: 900 !important;
+}
+
+/* All icons in headings */
+[data-theme="light"] h3 i[class*="fa-"] {
+    font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands", "Font Awesome 6 Pro" !important;
+    font-weight: 900 !important;
+}
+
+/* Icons in buttons and other elements */
+[data-theme="light"] button i,
+[data-theme="light"] .accent-gradient i {
+    color: inherit !important;
+}
+
+/* Wake Up button - giữ nguyên style như dark theme nhưng chữ đen */
+[data-theme="light"] #btnWakeUp,
+[data-theme="light"] #btnWakeUp.accent-gradient {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+    color: #1D1D1F !important;
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+}
+
+[data-theme="light"] #btnWakeUp i,
+[data-theme="light"] #btnWakeUp.accent-gradient i {
+    color: #1D1D1F !important;
+}
+
+[data-theme="light"] #btnWakeUp:hover,
+[data-theme="light"] #btnWakeUp.accent-gradient:hover {
+    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4), 0 0 16px rgba(99, 102, 241, 0.2) !important;
+    transform: translateY(-2px) !important;
+    opacity: 0.9 !important;
+}
+
+[data-theme="light"] #btnWakeUp:disabled {
+    background: #475569 !important;
+    color: #94a3b8 !important;
+    box-shadow: none !important;
+}
+
+/* Gray icons */
+[data-theme="light"] .text-gray-300,
+[data-theme="light"] i.text-gray-300,
+[data-theme="light"] .fa-brands.text-gray-300 {
+    color: var(--text-secondary) !important;
+}
+
+/* ============================================
+   SMOOTH TRANSITIONS
+   (Exclude FontAwesome icons to preserve their font-family)
+   ============================================ */
+[data-theme="light"] *:not(i):not(.fa-solid):not(.fa-brands):not(.fa-regular) {
+    transition: background-color 0.2s ease, 
+                border-color 0.2s ease, 
+                color 0.2s ease,
+                box-shadow 0.2s ease;
+}
+
+/* ============================================
+   TEXT TRANSFORM - Preserve original case
+   Override Tailwind CSS defaults
+   ============================================ */
+/* Only apply uppercase where explicitly needed */
+[data-theme="light"] .uppercase,
+[data-theme="light"] [class*="uppercase"] {
+    text-transform: uppercase !important;
+}
+
+/* Force normal case for all text elements unless they have uppercase class */
+[data-theme="light"] body,
+[data-theme="light"] div,
+[data-theme="light"] span,
+[data-theme="light"] p,
+[data-theme="light"] h1,
+[data-theme="light"] h2,
+[data-theme="light"] h3,
+[data-theme="light"] h4,
+[data-theme="light"] h5,
+[data-theme="light"] h6,
+[data-theme="light"] button:not(.uppercase):not([class*="uppercase"]),
+[data-theme="light"] a:not(.uppercase):not([class*="uppercase"]),
+[data-theme="light"] label:not(.uppercase):not([class*="uppercase"]),
+[data-theme="light"] input:not(.uppercase):not([class*="uppercase"]),
+[data-theme="light"] textarea:not(.uppercase):not([class*="uppercase"]),
+[data-theme="light"] select:not(.uppercase):not([class*="uppercase"]) {
+    text-transform: none !important;
+    font-variant: normal !important;
+    text-rendering: auto !important;
+}
+
+/* ============================================
+   NAVBAR OVERRIDE - ULTIMATE PRIORITY
+   Force transparent background no matter what
+   ============================================ */
+html[data-theme="light"] body nav.sticky.top-0.z-50,
+html[data-theme="light"] body nav[class*="bg"],
+html[data-theme="light"] body nav {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+html[data-theme="light"] body nav div,
+html[data-theme="light"] body nav div div,
+html[data-theme="light"] body nav div div div {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+}
+
+/* ============================================
+   TEXT TRANSFORM OVERRIDE - Simplified
+   ============================================ */
+/* Global override - Simple and fast */
+html[data-theme="light"] * {
+    text-transform: none !important;
+}
+
+/* Only allow uppercase for explicit uppercase class */
+html[data-theme="light"] .uppercase,
+html[data-theme="light"] [class*="uppercase"] {
+    text-transform: uppercase !important;
+}
+

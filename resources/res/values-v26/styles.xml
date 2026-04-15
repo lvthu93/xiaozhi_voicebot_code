@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Base.Theme.AppCompat">
+    </style>
+    <style name="Base.Theme.AppCompat.Light">
+    </style>
+    <style name="Base.V26.Theme.AppCompat">
+        <item name="colorError">?attr/colorError</item>
+    </style>
+    <style name="Base.V26.Theme.AppCompat.Light">
+        <item name="colorError">?attr/colorError</item>
+    </style>
+    <style name="Base.V26.Widget.AppCompat.Toolbar">
+        <item name="android:touchscreenBlocksFocus">true</item>
+    </style>
+    <style name="Base.Widget.AppCompat.Toolbar">
+    </style>
+</resources>

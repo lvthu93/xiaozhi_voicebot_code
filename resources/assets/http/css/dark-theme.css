@@ -1,0 +1,82 @@
+/* ============================================
+   DARK THEME
+   ============================================ */
+
+[data-theme="dark"] body,
+body:not([data-theme]) {
+    background: linear-gradient(135deg, #0a0e1a 0%, #0f1419 50%, #0a0e1a 100%);
+    color: #e2e8f0;
+}
+
+/* Glassmorphism - Dark */
+[data-theme="dark"] .glass-card,
+body:not([data-theme]) .glass-card {
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(99, 102, 241, 0.15);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        0 0 0 1px rgba(99, 102, 241, 0.05);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+[data-theme="dark"] .glass-card:hover,
+body:not([data-theme]) .glass-card:hover {
+    background: rgba(15, 23, 42, 0.75);
+    border-color: rgba(99, 102, 241, 0.35);
+    box-shadow: 
+        0 12px 48px rgba(99, 102, 241, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15),
+        0 0 0 1px rgba(99, 102, 241, 0.1),
+        0 0 24px rgba(99, 102, 241, 0.15);
+    transform: translateY(-2px);
+}
+
+[data-theme="dark"] .glass-panel,
+body:not([data-theme]) .glass-panel {
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    box-shadow: 
+        0 4px 24px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] nav,
+body:not([data-theme]) nav {
+    background: rgba(10, 14, 26, 0.9) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+/* Tab Inactive - Dark */
+[data-theme="dark"] .tab-inactive,
+body:not([data-theme]) .tab-inactive {
+    background: rgba(30, 41, 59, 0.4);
+    color: #94a3b8;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+[data-theme="dark"] .tab-inactive:hover,
+body:not([data-theme]) .tab-inactive:hover {
+    background: rgba(30, 41, 59, 0.65);
+    color: #e2e8f0;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Input Focus - Dark */
+[data-theme="dark"] input[type="text"]:focus,
+body:not([data-theme]) input[type="text"]:focus,
+[data-theme="dark"] input[type="number"]:focus,
+body:not([data-theme]) input[type="number"]:focus,
+[data-theme="dark"] select:focus,
+body:not([data-theme]) select:focus,
+[data-theme="dark"] textarea:focus,
+body:not([data-theme]) textarea:focus {
+    box-shadow: 
+        0 0 0 3px rgba(99, 102, 241, 0.2),
+        0 4px 12px rgba(99, 102, 241, 0.15);
+}
+

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:background="#fff5f5f5" android:padding="16dp" android:layout_width="match_parent" android:layout_height="match_parent">
+    <LinearLayout android:gravity="center_horizontal" android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content">
+        <TextView android:textSize="24sp" android:textStyle="bold" android:textColor="#ff333333" android:gravity="center" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="32dp" android:text="XiaoZhi Voice Bot"/>
+        <TextView android:textSize="16sp" android:textColor="#ff666666" android:gravity="center" android:id="@+id/textViewDescription" android:background="#ffffffff" android:padding="20dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="32dp" android:text="Official XiaoZhi Voice Assistant\10\10• Pre-configured official server\10• Automatic device activation\10• Secure MQTT connection" android:lineSpacingMultiplier="1.4"/>
+        <Button android:textSize="18sp" android:textStyle="bold" android:textColor="#ffffffff" android:id="@+id/buttonConnect" android:background="#ff2196f3" android:padding="20dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="24dp" android:text="Connect to XiaoZhi"/>
+        <ProgressBar android:id="@+id/progressBar" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="16dp"/>
+        <TextView android:textSize="14sp" android:gravity="center" android:id="@+id/textViewStatus" android:visibility="gone" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="16dp"/>
+    </LinearLayout>
+</ScrollView>

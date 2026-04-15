@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI BOX PLUS</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS Modules -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/custom.css">
+    <link rel="stylesheet" href="css/dark-theme.css">
+    <link rel="stylesheet" href="css/light-theme.css">
+</head>
+<body class="text-slate-200 min-h-screen">
+
+    <!-- Alarm Banner (ẩn mặc định) -->
+    <div id="alarmBanner" class="fixed top-0 left-0 right-0 z-[100] bg-gradient-to-r from-red-600 to-orange-600 shadow-2xl transform -translate-y-full transition-transform duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center animate-pulse">
+                        <i class="fa-solid fa-bell text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <div class="text-white font-bold text-lg" id="alarmBannerTitle">Báo thức</div>
+                        <div class="text-white/90 text-sm" id="alarmBannerMessage">Đang phát báo thức...</div>
+                    </div>
+                </div>
+                <button onclick="app.stopAlarm()" class="bg-white/20 hover:bg-white/30 backdrop-blur-md text-white font-bold px-6 py-2 rounded-lg transition-all flex items-center gap-2 shadow-lg">
+                    <i class="fa-solid fa-stop"></i>
+                    Dừng
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <!-- Header Container: Navbar + Tab Navigation -->
+    <div id="header-container" class="sticky top-0 z-50 bg-[#0b0f19]">
+        <div class="max-w-2xl mx-auto">
+            <div class="px-4 sm:px-6 lg:px-8">
+                <!-- Navbar -->
+                <nav class="flex items-center justify-center h-16">
+                    <div class="flex items-center gap-3">
+                        <div id="themeToggle" class="w-8 h-8 rounded-lg accent-gradient flex items-center justify-center shadow-lg shadow-indigo-500/30 cursor-pointer hover:scale-110 transition-transform">
+                            <i id="themeToggleIcon" class="fa-solid fa-wave-square text-white text-sm"></i>
+                        </div>
+                        <div>
+                            <a href="https://ai-box-plus.com/" target="_blank" class="font-bold text-lg tracking-tight text-white hover:text-indigo-400 transition-colors">AI BOX PLUS</a>
+                            <span id="appVersionBadge" class="text-[10px] uppercase font-bold text-cyan-400 bg-cyan-900/30 px-1.5 py-0.5 rounded ml-1 border border-cyan-500/20">--</span>
+                            <a id="newVersionBadge" href="#" target="_blank" class="hidden text-[10px] uppercase font-bold text-yellow-400 bg-yellow-900/30 px-1.5 py-0.5 rounded ml-1 border border-yellow-500/20 hover:bg-yellow-900/50 transition-colors cursor-pointer">Có version mới: --</a>
+                        </div>
+                    </div>
+                </nav>
+                
+                <!-- Tab Navigation -->
+                <div class="glass-panel rounded-xl p-1 flex gap-2 mb-2">
+                <button onclick="showMainTab('media')" id="main-tab-media" class="tab-active flex-1 py-2.5 rounded-lg text-xs font-bold transition-all">
+                    <i class="fa-solid fa-music mr-2"></i>Media
+                </button>
+                <button onclick="showMainTab('system')" id="main-tab-system" class="tab-inactive flex-1 py-2.5 rounded-lg text-xs font-bold transition-all">
+                    <i class="fa-solid fa-microchip mr-2"></i>Wifi
+                </button>
+                <button onclick="showMainTab('chat')" id="main-tab-chat" class="tab-inactive flex-1 py-2.5 rounded-lg text-xs font-bold transition-all">
+                    <i class="fa-solid fa-comments mr-2"></i>Chat
+                </button>
+                <button onclick="showMainTab('audio')" id="main-tab-audio" class="tab-inactive flex-1 py-2.5 rounded-lg text-xs font-bold transition-all">
+                    <i class="fa-solid fa-sliders mr-2"></i>Control
+                </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content - 1 Column Layout (Compact Center) -->
+    <main class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pb-6">
+        
+        <div class="space-y-5">
+
+            <!-- Tab Content: Media & Audio (Default) -->
+            <div id="main-content-media" class="tab-content active space-y-5">
+                
+                <!-- Media Card -->
+                <div class="glass-card rounded-2xl p-0 overflow-hidden relative group">
+                    <!-- Album Art Background với Controls Overlay -->
+                    <div class="h-56 bg-gradient-to-br from-slate-800 via-indigo-900/30 to-slate-900 relative flex items-center justify-center overflow-hidden">
+                        <!-- Album Art Image Background -->
+                        <img id="albumArt" src="" alt="" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300" style="display: none;">
+                        <!-- Fallback Background -->
+                        <div class="absolute inset-0 opacity-20 bg-gradient-to-br from-slate-700 via-indigo-800/20 to-slate-900"></div>
+                        
+                        <!-- Album Art Thumbnail (nhỏ hơn, bên trái) -->
+                        <div class="absolute left-4 z-10 w-20 h-20 rounded-lg bg-slate-700/50 backdrop-blur-md flex items-center justify-center shadow-xl border border-indigo-500/20 overflow-hidden" id="albumArtContainer">
+                            <i class="fa-solid fa-music text-3xl text-indigo-400" id="albumArtIcon"></i>
+                            <img id="albumArtThumb" src="" alt="" class="w-full h-full object-cover hidden">
+                        </div>
+                        
+                        <!-- Title và Artist (góc trái trên cùng) -->
+                        <div class="absolute top-2 left-2 z-10 pr-4 max-w-[calc(100%-8rem)]">
+                            <h2 id="trackTitle" class="font-bold text-white truncate text-sm mb-0.5 drop-shadow-lg">Không có nhạc</h2>
+                            <p id="trackArtist" class="text-xs text-slate-300 truncate drop-shadow-lg">---</p>
+                        </div>
+                        
+                        <!-- Waveform Visualization (hiển thị khi đang phát) -->
+                        <div id="waveformContainer" class="absolute bottom-4 left-0 right-0 z-10 px-4 hidden">
+                            <div class="waveform flex items-end justify-between gap-0.5 h-12 w-full">
+                                <div class="wave-bar" style="--i: 0"></div>
+                                <div class="wave-bar" style="--i: 1"></div>
+                                <div class="wave-bar" style="--i: 2"></div>
+                                <div class="wave-bar" style="--i: 3"></div>
+                                <div class="wave-bar" style="--i: 4"></div>
+                                <div class="wave-bar" style="--i: 5"></div>
+                                <div class="wave-bar" style="--i: 6"></div>
+                                <div class="wave-bar" style="--i: 7"></div>
+                                <div class="wave-bar" style="--i: 8"></div>
+                                <div class="wave-bar" style="--i: 9"></div>
+                                <div class="wave-bar" style="--i: 10"></div>
+                                <div class="wave-bar" style="--i: 11"></div>
+                                <div class="wave-bar" style="--i: 12"></div>
+                                <div class="wave-bar" style="--i: 13"></div>
+                                <div class="wave-bar" style="--i: 14"></div>
+                                <div class="wave-bar" style="--i: 15"></div>
+                                <div class="wave-bar" style="--i: 16"></div>
+                                <div class="wave-bar" style="--i: 17"></div>
+                                <div class="wave-bar" style="--i: 18"></div>
+                                <div class="wave-bar" style="--i: 19"></div>
+                                <div class="wave-bar" style="--i: 20"></div>
+                                <div class="wave-bar" style="--i: 21"></div>
+                                <div class="wave-bar" style="--i: 22"></div>
+                                <div class="wave-bar" style="--i: 23"></div>
+                                <div class="wave-bar" style="--i: 24"></div>
+                                <div class="wave-bar" style="--i: 25"></div>
+                                <div class="wave-bar" style="--i: 26"></div>
+                                <div class="wave-bar" style="--i: 27"></div>
+                                <div class="wave-bar" style="--i: 28"></div>
+                                <div class="wave-bar" style="--i: 29"></div>
+                                <div class="wave-bar" style="--i: 30"></div>
+                                <div class="wave-bar" style="--i: 31"></div>
+                                <div class="wave-bar" style="--i: 32"></div>
+                                <div class="wave-bar" style="--i: 33"></div>
+                                <div class="wave-bar" style="--i: 34"></div>
+                                <div class="wave-bar" style="--i: 35"></div>
+                                <div class="wave-bar" style="--i: 36"></div>
+                                <div class="wave-bar" style="--i: 37"></div>
+                                <div class="wave-bar" style="--i: 38"></div>
+                                <div class="wave-bar" style="--i: 39"></div>
+                                <div class="wave-bar" style="--i: 40"></div>
+                                <div class="wave-bar" style="--i: 41"></div>
+                                <div class="wave-bar" style="--i: 42"></div>
+                                <div class="wave-bar" style="--i: 43"></div>
+                                <div class="wave-bar" style="--i: 44"></div>
+                                <div class="wave-bar" style="--i: 45"></div>
+                                <div class="wave-bar" style="--i: 46"></div>
+                                <div class="wave-bar" style="--i: 47"></div>
+                                <div class="wave-bar" style="--i: 48"></div>
+                                <div class="wave-bar" style="--i: 49"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Playback Controls Overlay (giữa màn hình) -->
+                        <div class="z-10 flex flex-col items-center justify-center gap-2 absolute inset-0">
+                            <div class="flex items-center justify-center gap-2">
+                                <button onclick="app.control.prev()" class="control-btn text-white/90 hover:text-white p-2 backdrop-blur-md bg-black/40 rounded-full hover:bg-indigo-500/30" title="Bài trước">
+                                    <i class="fa-solid fa-backward-step text-lg"></i>
+                                </button>
+                                <button onclick="app.control.pause()" class="control-btn text-white/90 hover:text-white p-2 backdrop-blur-md bg-black/40 rounded-full hover:bg-indigo-500/30" title="Tạm dừng">
+                                    <i class="fa-solid fa-pause text-lg"></i>
+                                </button>
+                                <button onclick="app.control.resume()" class="control-btn text-white/90 hover:text-white p-2 backdrop-blur-md bg-black/40 rounded-full hover:bg-indigo-500/30" title="Tiếp tục">
+                                    <i class="fa-solid fa-play text-lg"></i>
+                                </button>
+                                <button onclick="app.control.stop()" class="control-btn text-white/90 hover:text-white p-2 backdrop-blur-md bg-black/40 rounded-full hover:bg-indigo-500/30" title="Dừng">
+                                    <i class="fa-solid fa-stop text-lg"></i>
+                                </button>
+                                <button onclick="app.control.next()" class="control-btn text-white/90 hover:text-white p-2 backdrop-blur-md bg-black/40 rounded-full hover:bg-indigo-500/30" title="Bài sau">
+                                    <i class="fa-solid fa-forward-step text-lg"></i>
+                                </button>
+                            </div>
+                            <!-- Auto-next button (hàng dưới các nút play) -->
+                            <button onclick="app.toggleAutoNext()" id="btnAutoNext" class="control-btn text-white/90 hover:text-white p-2 backdrop-blur-md bg-black/40 rounded-full hover:bg-indigo-500/30" title="Tự động phát tiếp">
+                                <i class="fa-solid fa-shuffle text-lg"></i>
+                            </button>
+                    </div>
+
+                        <!-- Progress Bar Overlay (dưới cùng) -->
+                        <div class="absolute bottom-0 left-0 right-0 z-10 p-3 bg-gradient-to-t from-black/70 to-transparent">
+                            <div class="flex justify-between text-[10px] text-white/90 mb-1">
+                                <span id="progressCurrent">0:00</span>
+                                <span id="progressTotal">0:00</span>
+                            </div>
+                            <div class="w-full h-1.5 bg-white/20 rounded-full overflow-hidden backdrop-blur-sm cursor-pointer" id="progressBarContainer" onclick="app.seekToPosition(event)">
+                                <div id="progressBar" class="h-full accent-gradient transition-all duration-300" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Source Badge -->
+                        <div class="absolute top-2 right-2 z-20">
+                            <span id="sourceBadge" class="text-[10px] font-bold bg-black/60 backdrop-blur-sm px-2 py-1 rounded border border-indigo-500/30 text-white">IDLE</span>
+                        </div>
+                    </div>
+
+                    <!-- Controls Panel -->
+                    <div class="p-5 bg-slate-900/50">
+
+                        <!-- Tabs: Songs / Playlist / Zing MP3 / Báo thức -->
+                        <div class="mb-3 flex gap-2 border-b border-indigo-500/20">
+                            <button id="tab-songs" onclick="app.switchSearchTab('songs')" class="px-3 py-1.5 text-xs font-bold text-slate-400 hover:text-slate-300 border-b-2 border-indigo-500 transition-colors">Songs</button>
+                            <button id="tab-playlist" onclick="app.switchSearchTab('playlist')" class="px-3 py-1.5 text-xs font-bold text-slate-400 hover:text-slate-300 transition-colors">Playlist</button>
+                            <button id="tab-zing" onclick="app.switchSearchTab('zing')" class="px-3 py-1.5 text-xs font-bold text-slate-400 hover:text-slate-300 transition-colors">Zing MP3</button>
+                            <button id="tab-alarm" onclick="app.switchSearchTab('alarm')" class="px-3 py-1.5 text-xs font-bold text-slate-400 hover:text-slate-300 transition-colors"><i class="fa-solid fa-bell mr-1"></i>Báo thức</button>
+                        </div>
+                        
+                        <!-- Search (ẩn khi tab alarm) -->
+                        <div id="searchSection" class="flex gap-2 mb-6">
+                            <input type="text" id="musicQuery" placeholder="Tìm bài hát..." class="flex-1 bg-slate-800/40 backdrop-blur-sm border border-indigo-500/20 rounded-lg px-3 py-2 text-xs focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all hover:bg-slate-800/50">
+                            <button onclick="app.playMusicInput()" class="accent-gradient hover:opacity-90 text-white px-3 rounded-lg text-xs transition-all shadow-lg shadow-indigo-500/30"><i class="fa-solid fa-search"></i></button>
+                        </div>
+
+                        <!-- Alarm Management (ẩn mặc định) -->
+                        <div id="alarmSection" class="hidden mb-6">
+                            <div class="flex gap-2 mb-3">
+                                <button onclick="app.showAddAlarmModal()" class="flex-1 accent-gradient hover:opacity-90 text-white px-3 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/30">
+                                    <i class="fa-solid fa-plus"></i> Thêm báo thức
+                            </button>
+                                <button onclick="app.loadAlarms()" class="bg-slate-700/60 backdrop-blur-sm hover:bg-slate-600/70 text-white px-3 py-2 rounded-lg text-xs transition-all hover:scale-105" title="Làm mới">
+                                    <i class="fa-solid fa-refresh"></i>
+                                </button>
+                            </div>
+                            <div id="alarmList" class="space-y-2 max-h-[300px] overflow-y-auto">
+                                <!-- Danh sách báo thức sẽ được load ở đây -->
+                                <div class="text-center text-slate-500 text-xs py-4">
+                                    <i class="fa-solid fa-bell-slash text-xl mb-2 block"></i>
+                                    Chưa có báo thức nào
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Volume -->
+                        <div class="mb-2">
+                            <div class="flex justify-between text-xs text-slate-400 mb-2">
+                                <span><i class="fa-solid fa-volume-high mr-1"></i>Âm lượng</span>
+                                <span id="volText" class="text-slate-300 font-bold">Mức 5</span>
+                            </div>
+                            <!-- Max volume 15 as requested -->
+                            <input type="range" id="volSlider" min="0" max="15" value="5" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-500">
+                        </div>
+                        
+                        <!-- Search Results -->
+                        <div id="aiboxplus-results" class="mt-4 pt-4 border-t border-indigo-500/20 space-y-2 max-h-[300px] overflow-y-auto">
+                            <!-- Results will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+                <!-- Tab Content: Audio & Lighting (Tab 4) -->
+                <div id="main-content-audio" class="tab-content hidden space-y-5">
+                    
+                    <!-- DLNA / AirPlay Control -->
+                    <div class="glass-card rounded-xl p-5">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-white text-xs uppercase tracking-wider"><i class="fa-solid fa-wifi text-indigo-400 mr-2"></i>DLNA / AirPlay</h3>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <!-- DLNA Switch -->
+                            <div class="flex items-center justify-between bg-slate-800/40 backdrop-blur-sm p-3 rounded-lg border border-indigo-500/20 hover:bg-slate-800/50 hover:border-indigo-500/30 transition-all">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-network-wired text-indigo-400"></i>
+                                    <span class="text-xs font-bold text-slate-300">DLNA</span>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="sw-dlna" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                                </label>
+                            </div>
+
+                            <!-- AirPlay Switch -->
+                            <div class="flex items-center justify-between bg-slate-800/40 backdrop-blur-sm p-3 rounded-lg border border-indigo-500/20 hover:bg-slate-800/50 hover:border-indigo-500/30 transition-all">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-brands fa-apple text-gray-300"></i>
+                                    <span class="text-xs font-bold text-slate-300">AirPlay</span>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="sw-airplay" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                                </label>
+                            </div>
+
+                            <!-- Bluetooth (BLE) Switch -->
+                            <div class="flex items-center justify-between bg-slate-800/40 backdrop-blur-sm p-3 rounded-lg border border-indigo-500/20 hover:bg-slate-800/50 hover:border-indigo-500/30 transition-all">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-brands fa-bluetooth text-indigo-400"></i>
+                                    <span class="text-xs font-bold text-slate-300">Bluetooth</span>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="sw-bluetooth" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                                </label>
+                            </div>
+
+                            <!-- LED Switch -->
+                            <div class="flex items-center justify-between bg-slate-800/40 backdrop-blur-sm p-3 rounded-lg border border-indigo-500/20 hover:bg-slate-800/50 hover:border-indigo-500/30 transition-all">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-lightbulb text-yellow-400"></i>
+                                    <span class="text-xs font-bold text-slate-300">Đèn LED(Tắt để nháy theo nhạc)</span>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="sw-led" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Audio Engine Tabs -->
+                    <div class="glass-card rounded-xl p-5">
+                        <div class="flex justify-between items-center mb-5">
+                            <h3 class="font-bold text-white flex items-center gap-2"><i class="fa-solid fa-sliders text-indigo-400"></i> Audio Engine</h3>
+                            <div class="flex bg-slate-800/50 p-1 rounded-lg">
+                                <button onclick="app.ui.showAudioTab('eq')" id="tab-eq" class="tab-btn active px-3 py-1 rounded text-xs font-medium transition-all">Equalizer</button>
+                                <button onclick="app.ui.showAudioTab('surround')" id="tab-surround" class="tab-btn px-3 py-1 rounded text-xs font-medium text-slate-400 hover:text-white transition-all">Surround</button>
+                            </div>
+                        </div>
+
+                        <!-- EQ Panel (Fixed Layout) -->
+                        <div id="panel-eq" class="space-y-4">
+                            <div class="flex justify-between items-end h-[180px] relative" style="background: transparent !important; border: none !important; box-shadow: none !important;">
+                                <!-- 5 Bands -->
+                                <div class="flex flex-col items-center justify-end h-full flex-1 gap-2" style="background: transparent !important; border: none !important; box-shadow: none !important;">
+                                    <div class="slider-vertical-wrapper">
+                                        <input type="range" data-band="0" min="-1500" max="1500" step="100" value="0" class="vertical-range appearance-none accent-indigo-500" oninput="app.audioControl.setEqBand(0, this.value)">
+                                    </div>
+                                    <span class="text-[10px] font-mono text-slate-300 mt-2">60Hz</span>
+                                </div>
+                                <div class="flex flex-col items-center justify-end h-full flex-1 gap-2" style="background: transparent !important; border: none !important; box-shadow: none !important;">
+                                    <div class="slider-vertical-wrapper">
+                                        <input type="range" data-band="1" min="-1500" max="1500" step="100" value="0" class="vertical-range appearance-none accent-indigo-500" oninput="app.audioControl.setEqBand(1, this.value)">
+                                    </div>
+                                    <span class="text-[10px] font-mono text-slate-300 mt-2">230Hz</span>
+                                </div>
+                                <div class="flex flex-col items-center justify-end h-full flex-1 gap-2" style="background: transparent !important; border: none !important; box-shadow: none !important;">
+                                    <div class="slider-vertical-wrapper">
+                                        <input type="range" data-band="2" min="-1500" max="1500" step="100" value="0" class="vertical-range appearance-none accent-indigo-500" oninput="app.audioControl.setEqBand(2, this.value)">
+                                    </div>
+                                    <span class="text-[10px] font-mono text-slate-300 mt-2">910Hz</span>
+                                </div>
+                                <div class="flex flex-col items-center justify-end h-full flex-1 gap-2" style="background: transparent !important; border: none !important; box-shadow: none !important;">
+                                    <div class="slider-vertical-wrapper">
+                                        <input type="range" data-band="3" min="-1500" max="1500" step="100" value="0" class="vertical-range appearance-none accent-indigo-500" oninput="app.audioControl.setEqBand(3, this.value)">
+                                    </div>
+                                    <span class="text-[10px] font-mono text-slate-300 mt-2">3.6k</span>
+                                </div>
+                                <div class="flex flex-col items-center justify-end h-full flex-1 gap-2" style="background: transparent !important; border: none !important; box-shadow: none !important;">
+                                    <div class="slider-vertical-wrapper">
+                                        <input type="range" data-band="4" min="-1500" max="1500" step="100" value="0" class="vertical-range appearance-none accent-indigo-500" oninput="app.audioControl.setEqBand(4, this.value)">
+                                    </div>
+                                    <span class="text-[10px] font-mono text-slate-300 mt-2">14k</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Presets -->
+                            <div class="flex flex-wrap gap-2 justify-center">
+                                <button onclick="app.audioControl.applyEqPreset('flat')" class="px-3 py-1.5 bg-slate-800/50 hover:bg-slate-700/50 rounded-lg text-[10px] text-slate-300 border border-indigo-500/20 transition-all">Flat</button>
+                                <button onclick="app.audioControl.applyEqPreset('bass')" class="px-3 py-1.5 bg-slate-800/50 hover:bg-slate-700/50 rounded-lg text-[10px] text-slate-300 border border-indigo-500/20 transition-all">Bass Boost</button>
+                                <button onclick="app.audioControl.applyEqPreset('vocal')" class="px-3 py-1.5 bg-slate-800/50 hover:bg-slate-700/50 rounded-lg text-[10px] text-slate-300 border border-indigo-500/20 transition-all">Vocal</button>
+                                <button onclick="app.audioControl.applyEqPreset('rock')" class="px-3 py-1.5 bg-slate-800/50 hover:bg-slate-700/50 rounded-lg text-[10px] text-slate-300 border border-indigo-500/20 transition-all">Rock</button>
+                                <button onclick="app.audioControl.applyEqPreset('jazz')" class="px-3 py-1.5 bg-slate-800/50 hover:bg-slate-700/50 rounded-lg text-[10px] text-slate-300 border border-indigo-500/20 transition-all">Jazz</button>
+                            </div>
+                            
+                            <!-- Extra Bass/Loudness -->
+                            <div class="grid grid-cols-2 gap-3 mt-2">
+                                 <div class="bg-slate-800/30 p-3 rounded-lg flex items-center justify-between border border-indigo-500/20">
+                                    <span class="text-xs text-slate-300">Bass+</span>
+                                    <input type="checkbox" onchange="app.audioControl.toggleBass(this.checked)" class="accent-indigo-500 w-4 h-4">
+                                 </div>
+                                 <div class="bg-slate-800/30 p-3 rounded-lg flex items-center justify-between border border-indigo-500/20">
+                                    <span class="text-xs text-slate-300">Loudness</span>
+                                    <input type="checkbox" onchange="app.audioControl.toggleLoudness(this.checked)" class="accent-indigo-500 w-4 h-4">
+                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- Surround Panel (Hidden by default) -->
+                        <div id="panel-surround" class="hidden space-y-4 py-2">
+                            <div class="flex justify-between items-center mb-2">
+                                 <span class="text-xs font-bold text-slate-300">VIRTUAL SURROUND</span>
+                                 <button onclick="app.audioControl.toggleSurround(false)" class="text-[10px] text-red-400 hover:underline">Reset</button>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <div class="flex justify-between text-[10px] text-slate-400 mb-1"><span>WIDTH (Độ rộng)</span><span id="val-width" class="text-slate-300">40</span></div>
+                                    <input type="range" id="sur-w" min="0" max="100" value="40" class="w-full h-1 bg-slate-700 rounded accent-indigo-500" oninput="app.audioControl.updateSurround()">
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-[10px] text-slate-400 mb-1"><span>PRESENCE (Hiện diện)</span><span id="val-presence" class="text-slate-300">30</span></div>
+                                    <input type="range" id="sur-p" min="0" max="100" value="30" class="w-full h-1 bg-slate-700 rounded accent-indigo-500" oninput="app.audioControl.updateSurround()">
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-[10px] text-slate-400 mb-1"><span>SPACE (Không gian)</span><span id="val-space" class="text-slate-300">10</span></div>
+                                    <input type="range" id="sur-s" min="0" max="100" value="10" class="w-full h-1 bg-slate-700 rounded accent-indigo-500" oninput="app.audioControl.updateSurround()">
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-2 mt-4">
+                                <button onclick="app.audioControl.applySurPreset('cinema')" class="bg-slate-800/50 hover:bg-slate-700/50 py-2 rounded-lg text-xs text-slate-300 border border-indigo-500/20 transition-all">🎬 Cinema</button>
+                                <button onclick="app.audioControl.applySurPreset('wide')" class="bg-slate-800/50 hover:bg-slate-700/50 py-2 rounded-lg text-xs text-slate-300 border border-indigo-500/20 transition-all">🌌 Wide Space</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Wake Word Sensitivity Panel -->
+                        <div class="mt-5 pt-5 border-t border-slate-700/50">
+                            <div class="flex justify-between items-center mb-4">
+                                <h4 class="text-xs font-bold text-slate-300 flex items-center gap-2">
+                                    <i class="fa-solid fa-microphone text-indigo-400"></i> Wake Word Sensitivity
+                                </h4>
+                            </div>
+                            
+                            <div class="space-y-3">
+                                <div>
+                                    <div class="flex justify-between text-[10px] text-slate-400 mb-1">
+                                        <span>SENSITIVITY (Độ nhạy)</span>
+                                        <span id="val-wake-sensitivity" class="text-slate-300">0.90</span>
+                                    </div>
+                                    <input type="range" id="wake-sensitivity" min="0" max="1" step="0.01" value="0.90" 
+                                           class="w-full h-1 bg-slate-700 rounded accent-indigo-500" 
+                                           oninput="app.wakeWordControl.setSensitivity(this.value)">
+                                    <div class="flex justify-between text-[9px] text-slate-500 mt-1">
+                                        <span>Dễ kích hoạt</span>
+                                        <span>Khó kích hoạt</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Wake Word Enable/Disable Toggle -->
+                                <div class="flex items-center justify-between bg-slate-800/40 backdrop-blur-sm p-3 rounded-lg border border-indigo-500/20 hover:bg-slate-800/50 hover:border-indigo-500/30 transition-all mt-3">
+                                    <div class="flex items-center gap-2">
+                                        <i class="fa-solid fa-power-off text-indigo-400"></i>
+                                        <span class="text-xs font-bold text-slate-300">Wake Word Detection</span>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="sw-wake-word" class="sr-only peer" onchange="app.wakeWordControl.setEnabled(this.checked)">
+                                        <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lighting Control -->
+                    <div class="glass-card rounded-xl p-5">
+                        <h3 class="font-bold text-white mb-4 flex items-center gap-2"><i class="fa-solid fa-lightbulb text-yellow-400"></i> Lighting Control</h3>
+                        
+                        <!-- Mode Selector -->
+                        <div class="bg-slate-800/50 p-1 rounded-lg flex mb-4">
+                            <button onclick="app.ui.showLightTab('main')" id="ltab-main" class="flex-1 py-1.5 rounded-lg text-xs font-medium accent-gradient text-white transition-all shadow-lg shadow-indigo-500/30">Đèn Chính (RGB)</button>
+                            <button onclick="app.ui.showLightTab('edge')" id="ltab-edge" class="flex-1 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition-all">Đèn Viền (Edge)</button>
+                        </div>
+
+                        <!-- Main RGB Panel (Simplified) -->
+                        <div id="lpanel-main" class="space-y-4">
+                            <div class="flex justify-between items-center bg-slate-800/40 backdrop-blur-sm p-3 rounded-lg border border-indigo-500/20 hover:bg-slate-800/50 hover:border-indigo-500/30 transition-all">
+                                <span class="text-xs font-bold text-slate-300">Trạng thái</span>
+                                <div class="flex items-center gap-2">
+                                    <input type="checkbox" id="sw-main-light" class="accent-indigo-500 w-5 h-5">
+                                </div>
+                            </div>
+
+                            <!-- Brightness Control -->
+                            <div class="bg-slate-800/40 backdrop-blur-sm p-3 rounded-lg border border-indigo-500/20 hover:bg-slate-800/50 hover:border-indigo-500/30 transition-all">
+                                <div class="flex justify-between text-[10px] text-slate-300 mb-2 font-bold">
+                                    <span><i class="fa-solid fa-sun mr-1"></i>Cường độ sáng</span>
+                                    <span id="brightnessDsp" class="text-slate-300">200</span>
+                                </div>
+                                <input type="range" id="mainBrightness" min="1" max="200" value="200" class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-500">
+                            </div>
+
+                            <!-- Speed Control -->
+                            <div class="bg-slate-800/40 backdrop-blur-sm p-3 rounded-lg border border-indigo-500/20 hover:bg-slate-800/50 hover:border-indigo-500/30 transition-all">
+                                <div class="flex justify-between text-[10px] text-slate-300 mb-2 font-bold">
+                                    <span><i class="fa-solid fa-gauge-high mr-1"></i>Tốc độ</span>
+                                    <span id="speedDsp" class="text-slate-300">50</span>
+                                </div>
+                                <input type="range" id="mainSpeed" min="1" max="100" value="50" class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-500">
+                            </div>
+
+                            <!-- Integrated Modes -->
+                            <div>
+                                <span class="text-[10px] text-slate-300 font-bold mb-2 block">Chế độ tích hợp (Firmware)</span>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <button onclick="app.lightControl.setFwMode(0)" class="bg-slate-800/50 hover:bg-slate-700/50 py-2 rounded-lg text-[10px] text-slate-300 transition-all border border-indigo-500/20">Mặc Định</button>
+                                    <button onclick="app.lightControl.setFwMode(1)" class="bg-slate-800/50 hover:bg-slate-700/50 py-2 rounded-lg text-[10px] text-slate-300 transition-all border border-indigo-500/20">Xoay vòng</button>
+                                    <button onclick="app.lightControl.setFwMode(2)" class="bg-slate-800/50 hover:bg-slate-700/50 py-2 rounded-lg text-[10px] text-slate-300 transition-all border border-indigo-500/20">Nháy 1</button>
+                                    <button onclick="app.lightControl.setFwMode(3)" class="bg-slate-800/50 hover:bg-slate-700/50 py-2 rounded-lg text-[10px] text-slate-300 transition-all border border-indigo-500/20">Đơn sắc</button>
+                                    <button onclick="app.lightControl.setFwMode(4)" class="bg-slate-800/50 hover:bg-slate-700/50 py-2 rounded-lg text-[10px] text-slate-300 transition-all border border-indigo-500/20">Nháy 2</button>
+                                    <button onclick="app.lightControl.setFwMode(7)" class="bg-slate-800/50 hover:bg-slate-700/50 py-2 rounded-lg text-[10px] text-slate-300 transition-all border border-indigo-500/20">Hơi thở</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Edge Light Panel (Daemon) with Brightness -->
+                        <div id="lpanel-edge" class="hidden space-y-4">
+                             <div class="flex justify-between items-center bg-slate-800/40 backdrop-blur-sm p-3 rounded-lg border border-indigo-500/20 hover:bg-slate-800/50 hover:border-indigo-500/30 transition-all">
+                                <span class="text-xs font-bold text-slate-300">Trạng thái</span>
+                                 <div class="flex items-center gap-2">
+                                    <input type="checkbox" id="sw-edge-light" onchange="app.lightControl.toggleEdgeLight(this.checked)" class="accent-indigo-500 w-5 h-5">
+                                </div>
+                            </div>
+
+                            <!-- Edge Brightness -->
+                            <div class="bg-slate-800/40 backdrop-blur-sm p-3 rounded-lg border border-indigo-500/20 hover:bg-slate-800/50 hover:border-indigo-500/30 transition-all">
+                                <div class="flex justify-between text-[10px] text-slate-300 mb-2 font-bold">
+                                    <span><i class="fa-solid fa-lightbulb mr-1"></i>Cường độ viền</span>
+                                    <span id="edgeBrightnessDsp" class="text-slate-300">100%</span>
+                                </div>
+                                <input type="range" id="edgeBrightness" min="0" max="100" value="100" class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-500" oninput="document.getElementById('edgeBrightnessDsp').innerText = this.value + '%'; app.lightControl.setEdgeLightIntensity(this.value)">
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Tab Content: System & Network -->
+                <div id="main-content-system" class="tab-content hidden space-y-5">
+                    
+                    <!-- System Monitor -->
+                    <div class="glass-card rounded-xl p-5">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-white text-xs uppercase tracking-wider"><i class="fa-solid fa-microchip text-indigo-400 mr-2"></i>System Monitor</h3>
+                            <div id="sys-status-dot" class="w-2 h-2 rounded-full bg-slate-600"></div>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <!-- RAM -->
+                            <div>
+                                <div class="flex justify-between text-[10px] text-slate-300 mb-1">
+                                    <span>RAM Usage</span>
+                                    <span id="ramText" class="text-slate-300">--%</span>
+                                </div>
+                                <div class="h-2 bg-slate-800 rounded-full overflow-hidden">
+                                    <div id="ramBar" class="h-full accent-gradient w-0 transition-all duration-500"></div>
+                                </div>
+                            </div>
+                            <!-- CPU -->
+                            <div>
+                                <div class="flex justify-between text-[10px] text-slate-300 mb-1">
+                                    <span>CPU Load</span>
+                                    <span id="cpuText" class="text-slate-300">--%</span>
+                                </div>
+                                <div class="h-2 bg-slate-800 rounded-full overflow-hidden">
+                                    <div id="cpuBar" class="h-full bg-purple-500 w-0 transition-all duration-500"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-2 mt-4">
+                            <button onclick="app.control.reboot()" class="bg-red-900/30 hover:bg-red-900/50 text-red-400 border border-red-800/30 py-1.5 rounded-lg text-[10px] transition-all">Reboot</button>
+                            <button onclick="app.control.startSystemMonitor()" class="bg-slate-800/50 hover:bg-slate-700/50 text-slate-300 border border-indigo-500/20 py-1.5 rounded-lg text-[10px] transition-all">Refresh</button>
+                        </div>
+                    </div>
+
+                    <!-- MAC Address Management -->
+                    <div class="glass-card rounded-xl p-5">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-white text-xs uppercase tracking-wider"><i class="fa-solid fa-network-wired text-indigo-400 mr-2"></i>MAC Address</h3>
+                        </div>
+                        
+                        <!-- Current MAC Display -->
+                        <div class="mb-4 p-3 rounded-lg border border-indigo-500/20 bg-slate-800/30">
+                            <div class="text-xs font-bold text-slate-300 mb-1">MAC hiện tại:</div>
+                            <div class="text-[10px] text-slate-300 font-mono" id="macCurrentDisplay">Đang tải...</div>
+                            <div class="text-[9px] text-slate-500 mt-1" id="macTypeDisplay">--</div>
+                        </div>
+                        
+                        <!-- MAC Control Buttons -->
+                        <div class="space-y-2">
+                            <button onclick="app.mac.random()" class="w-full accent-gradient hover:opacity-90 text-white px-3 py-2 rounded-lg text-xs font-bold transition-all shadow-lg shadow-indigo-500/30 flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-shuffle"></i> Random MAC
+                            </button>
+                            <div class="flex gap-2">
+                                <button onclick="app.mac.get()" class="flex-1 bg-slate-800/50 hover:bg-slate-700/50 text-white px-3 py-2 rounded-lg text-xs font-bold transition-all border border-indigo-500/20">
+                                    <i class="fa-solid fa-refresh mr-1"></i>Làm mới
+                                </button>
+                                <button onclick="app.mac.clear()" class="flex-1 bg-red-900/30 hover:bg-red-900/50 text-red-400 border border-red-800/30 px-3 py-2 rounded-lg text-xs font-bold transition-all">
+                                    <i class="fa-solid fa-undo mr-1"></i>Dùng MAC thực
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- WiFi Setup -->
+                    <div class="glass-card rounded-xl p-5">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-white text-xs uppercase tracking-wider"><i class="fa-solid fa-wifi text-indigo-400 mr-2"></i>WiFi Setup</h3>
+                            <button onclick="app.wifi.scan()" class="accent-gradient hover:opacity-90 text-white text-xs px-3 py-1 rounded-lg font-bold transition-all shadow-lg shadow-indigo-500/30">
+                                <i class="fa-solid fa-sync mr-1"></i>Quét
+                            </button>
+                        </div>
+                        
+                        <!-- AP Mode Status -->
+                        <div id="wifiApStatus" class="mb-4 p-3 rounded-lg border border-yellow-500/30 bg-yellow-900/20 hidden">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-broadcast-tower text-yellow-400"></i>
+                                    <div>
+                                        <div class="text-xs font-bold text-slate-300">AP Mode Active</div>
+                                        <div class="text-[10px] text-slate-400" id="wifiApInfo">SSID: Phicomm-R1</div>
+                                    </div>
+                                </div>
+                                <button onclick="app.wifi.stopAp()" class="bg-red-600 hover:bg-red-500 text-white text-xs px-3 py-1 rounded-lg font-bold transition-all">
+                                    Tắt AP
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Current WiFi Status -->
+                        <div class="mb-4 p-3 rounded-lg border border-indigo-500/20 bg-slate-800/30">
+                            <div class="text-xs font-bold text-slate-300 mb-1">WiFi hiện tại:</div>
+                            <div class="text-[10px] text-slate-300" id="wifiCurrentStatus">Đang kiểm tra...</div>
+                        </div>
+                        
+                        <!-- WiFi Networks List -->
+                        <div class="mb-4">
+                            <div class="text-xs font-bold text-slate-300 mb-2">Danh sách WiFi:</div>
+                            <div id="wifiNetworksList" class="space-y-2 max-h-[200px] overflow-y-auto">
+                                <div class="text-xs text-slate-500 text-center py-4">Nhấn "Quét" để tìm WiFi</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Connect Form -->
+                        <div class="space-y-2">
+                            <div>
+                                <input type="text" id="wifiSsidInput" placeholder="SSID" class="w-full bg-slate-800/50 border border-indigo-500/20 rounded-lg px-3 py-2 text-xs focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all">
+                            </div>
+                            <div>
+                                <input type="password" id="wifiPasswordInput" placeholder="Password" class="w-full bg-slate-800/50 border border-indigo-500/20 rounded-lg px-3 py-2 text-xs focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all">
+                            </div>
+                            <div>
+                                <select id="wifiSecurityType" class="w-full bg-slate-800/50 border border-indigo-500/20 rounded-lg px-3 py-2 text-xs focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none text-slate-300">
+                                    <option value="auto">Tự động (từ danh sách)</option>
+                                    <option value="wpa">WPA/WPA2</option>
+                                    <option value="wep">WEP</option>
+                                    <option value="open">Open (không mật khẩu)</option>
+                                </select>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="app.wifi.connect()" class="flex-1 bg-green-600 hover:bg-green-500 text-white text-xs px-3 py-2 rounded-lg font-bold transition-all shadow-lg shadow-green-500/30">
+                                    <i class="fa-solid fa-link mr-1"></i>Kết nối
+                                </button>
+                                <button onclick="app.wifi.startAp()" class="bg-yellow-600 hover:bg-yellow-500 text-white text-xs px-3 py-2 rounded-lg font-bold transition-all shadow-lg shadow-yellow-500/30">
+                                    <i class="fa-solid fa-broadcast-tower mr-1"></i>Bật AP
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Saved WiFi Networks -->
+                        <div class="mt-4 pt-4 border-t border-indigo-500/20">
+                            <div class="flex justify-between items-center mb-2">
+                                <div class="text-xs font-bold text-slate-300">WiFi đã lưu:</div>
+                                <button onclick="app.wifi.getSaved()" class="text-xs text-slate-300 hover:text-slate-200">
+                                    <i class="fa-solid fa-sync mr-1"></i>Làm mới
+                                </button>
+                            </div>
+                            <div id="savedWifiList" class="space-y-2 max-h-[150px] overflow-y-auto">
+                                <div class="text-xs text-slate-500 text-center py-2">Đang kiểm tra...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Tab Content: Chat -->
+                <div id="main-content-chat" class="tab-content hidden space-y-5">
+                    
+                    <!-- Chat -->
+                    <div class="glass-card rounded-xl p-0 flex flex-col h-[600px] overflow-hidden">
+                        <div class="bg-slate-800/80 px-3 py-2 flex justify-between items-center border-b border-indigo-500/20">
+                            <span class="text-xs font-bold text-slate-300"><i class="fa-solid fa-comments text-indigo-400 mr-2"></i>Chat</span>
+                            <button onclick="app.chat.clear()" class="text-slate-500 hover:text-white text-xs transition-colors"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                        <div id="chatMessages" class="flex-1 bg-slate-900/50 p-3 overflow-y-auto space-y-2">
+                            <div class="text-xs text-slate-500 italic text-center py-4">Chưa có tin nhắn nào</div>
+                        </div>
+                        <div class="p-2 bg-slate-800/50 border-t border-indigo-500/20 space-y-2">
+                            <div class="flex gap-2">
+                                <input type="text" id="chatInput" placeholder="Nhập tin nhắn..." class="flex-1 bg-slate-700/50 text-white px-3 py-2 rounded-lg text-xs border border-indigo-500/20 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all" onkeypress="if(event.key === 'Enter') app.chat.sendText()">
+                                <button onclick="app.chat.sendText()" class="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg text-xs font-bold transition-all shadow-lg shadow-green-500/30">
+                                    <i class="fa-solid fa-paper-plane"></i>
+                                </button>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="app.chat.wakeUp()" id="btnWakeUp" class="flex-1 accent-gradient hover:opacity-90 text-white px-3 py-2 rounded-lg text-xs font-bold transition-all shadow-lg shadow-indigo-500/30 disabled:bg-slate-700 disabled:text-slate-400 disabled:shadow-none">
+                                    <i class="fa-solid fa-microphone mr-1"></i>Wake Up
+                                </button>
+                                <button onclick="app.chat.testMic()" class="bg-purple-600 hover:bg-purple-500 text-white px-3 py-2 rounded-lg text-xs font-bold transition-all shadow-lg shadow-purple-500/30">
+                                    <i class="fa-solid fa-microphone-lines mr-1"></i>Test Mic
+                                </button>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button onclick="app.chat.toggleTiktokReply()" id="btnTiktokReply" class="flex-1 bg-slate-700/50 hover:bg-slate-600/50 text-white px-3 py-2 rounded-lg text-xs font-bold transition-all border border-indigo-500/20">
+                                    <i class="fa-solid fa-video mr-1"></i><span id="tiktokReplyText">TikTok Reply: OFF</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    
+    <!-- JavaScript Modules -->
+    <script src="js/config.js"></script>
+    <script src="js/utils/logger.js"></script>
+    <script src="js/utils/helpers.js"></script>
+    <script src="js/connections/SpeakerConnection.js"></script>
+    <script src="js/connections/AiboxPlusConnection.js"></script>
+    <script src="js/managers/ChatManager.js"></script>
+    <script src="js/managers/WifiManager.js"></script>
+    <script src="js/managers/MacManager.js"></script>
+    <script src="js/managers/LedManager.js"></script>
+    <script src="js/controls/SpeakerControl.js"></script>
+    <script src="js/controls/AudioControl.js"></script>
+    <script src="js/controls/LightControl.js"></script>
+    <script src="js/ui/AppUI.js"></script>
+    <script src="js/app.js"></script>
+
+    <!-- Tab Switching Function -->
+    <script>
+        function showMainTab(tabName) {
+            // Lưu tab vào localStorage
+            localStorage.setItem('activeTab', tabName);
+            
+            // Get all tab contents
+            const allTabs = ['media', 'system', 'chat', 'audio'];
+            
+            // Fade out and hide all tab contents
+            allTabs.forEach(tab => {
+                const tabContent = document.getElementById('main-content-' + tab);
+                if (tabContent) {
+                    tabContent.classList.remove('active');
+                    setTimeout(() => {
+                        tabContent.classList.add('hidden');
+                    }, 150); // Wait for fade out
+                }
+            });
+            
+            // Remove active class from all tabs
+            document.getElementById('main-tab-media').classList.remove('tab-active');
+            document.getElementById('main-tab-media').classList.add('tab-inactive');
+            document.getElementById('main-tab-system').classList.remove('tab-active');
+            document.getElementById('main-tab-system').classList.add('tab-inactive');
+            document.getElementById('main-tab-chat').classList.remove('tab-active');
+            document.getElementById('main-tab-chat').classList.add('tab-inactive');
+            document.getElementById('main-tab-audio').classList.remove('tab-active');
+            document.getElementById('main-tab-audio').classList.add('tab-inactive');
+            
+            // Show selected tab content with fade-in
+            setTimeout(() => {
+                const selectedTab = document.getElementById('main-content-' + tabName);
+                if (selectedTab) {
+                    selectedTab.classList.remove('hidden');
+                    // Trigger reflow to restart animation
+                    void selectedTab.offsetWidth;
+                    selectedTab.classList.add('active');
+                }
+            }, 150);
+            
+            // Add active class to selected tab
+            document.getElementById('main-tab-' + tabName).classList.remove('tab-inactive');
+            document.getElementById('main-tab-' + tabName).classList.add('tab-active');
+        }
+        
+        // Load tab đã lưu khi trang load
+        function loadSavedTab() {
+            const savedTab = localStorage.getItem('activeTab') || 'media';
+            // Chờ DOM ready rồi mới switch tab
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', () => {
+                    showMainTab(savedTab);
+                });
+            } else {
+                showMainTab(savedTab);
+            }
+        }
+        
+        // Gọi loadSavedTab khi trang load
+        loadSavedTab();
+    </script>
+
+    <!-- Alarm Modal -->
+    <div id="alarmModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-sm">
+        <div class="glass-card border border-indigo-500/20 rounded-xl p-6 w-full max-w-md mx-4">
+            <div class="flex items-center justify-between mb-4">
+                <h3 id="alarmModalTitle" class="text-white font-bold text-lg">Thêm báo thức mới</h3>
+                <button onclick="app.hideAlarmModal()" class="text-slate-400 hover:text-white transition-colors">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            <input type="hidden" id="alarmId" value="">
+            <div class="space-y-4">
+                <div>
+                    <label class="text-xs text-slate-300 mb-1 block">Thời gian</label>
+                    <div class="flex gap-2">
+                        <div class="flex-1">
+                            <input type="number" id="alarmHour" min="0" max="23" value="7" class="w-full bg-slate-800/50 border border-indigo-500/20 rounded-lg px-3 py-2 text-white text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all" placeholder="Giờ">
+                        </div>
+                        <span class="text-white text-xl self-center">:</span>
+                        <div class="flex-1">
+                            <input type="number" id="alarmMinute" min="0" max="59" value="0" class="w-full bg-slate-800/50 border border-indigo-500/20 rounded-lg px-3 py-2 text-white text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all" placeholder="Phút">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label class="text-xs text-slate-300 mb-1 block">Lặp lại</label>
+                    <select id="alarmRepeat" class="w-full bg-slate-800/50 border border-indigo-500/20 rounded-lg px-3 py-2 text-white text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all">
+                        <option value="none">Một lần</option>
+                        <option value="daily">Hàng ngày</option>
+                        <option value="weekly">Hàng tuần</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-xs text-slate-300 mb-1 block">Tên báo thức (tùy chọn)</label>
+                    <input type="text" id="alarmLabel" class="w-full bg-slate-800/50 border border-indigo-500/20 rounded-lg px-3 py-2 text-white text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all" placeholder="Ví dụ: Báo thức buổi sáng">
+                </div>
+                <div>
+                    <label class="text-xs text-slate-300 mb-1 block">Âm lượng: <span id="alarmVolumeDisplay" class="text-slate-300">100</span>%</label>
+                    <input type="range" id="alarmVolume" min="0" max="100" value="100" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-500" oninput="document.getElementById('alarmVolumeDisplay').textContent = this.value">
+                </div>
+                <div>
+                    <label class="text-xs text-slate-300 mb-1 block">File âm thanh báo thức (tùy chọn)</label>
+                    <input type="file" id="alarmSoundFile" accept="audio/*" class="w-full bg-slate-800/50 border border-indigo-500/20 rounded-lg px-3 py-2 text-white text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none text-xs transition-all">
+                    <div id="alarmSoundFileName" class="text-xs text-slate-500 mt-1"></div>
+                    <button type="button" onclick="document.getElementById('alarmSoundFile').value = ''; document.getElementById('alarmSoundFileName').textContent = '';" class="text-xs text-red-400 hover:text-red-300 mt-1" style="display: none;" id="alarmSoundFileRemove">Xóa file</button>
+                </div>
+                <div>
+                    <label class="text-xs text-slate-300 mb-1 block">Hoặc nhập tên bài hát YouTube (tùy chọn)</label>
+                    <input type="text" id="alarmYoutubeSongName" placeholder="Ví dụ: Sơn Tùng MTP" class="w-full bg-slate-800/50 border border-indigo-500/20 rounded-lg px-3 py-2 text-white text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all">
+                    <div class="text-xs text-slate-500 mt-1">Khi báo thức reo, sẽ tự động tìm và phát bài đầu tiên</div>
+                </div>
+                <div class="flex gap-2 pt-2">
+                    <button onclick="app.hideAlarmModal()" class="flex-1 bg-slate-700/50 hover:bg-slate-600/50 text-white px-4 py-2 rounded-lg text-sm font-bold transition-all border border-indigo-500/20">
+                        Hủy
+                    </button>
+                    <button id="alarmSubmitBtn" onclick="app.submitAlarm()" class="flex-1 accent-gradient hover:opacity-90 text-white px-4 py-2 rounded-lg text-sm font-bold transition-all shadow-lg shadow-indigo-500/30">
+                        Thêm
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Theme Toggle Script -->
+    <script>
+        // Theme Manager
+        const ThemeManager = {
+            init: function() {
+                // Load theme from localStorage
+                const savedTheme = localStorage.getItem('theme') || 'dark';
+                this.setTheme(savedTheme);
+                
+                // Add click event to theme toggle
+                const themeToggle = document.getElementById('themeToggle');
+                if (themeToggle) {
+                    themeToggle.addEventListener('click', () => this.toggleTheme());
+                }
+            },
+            
+            setTheme: function(theme) {
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+                this.updateIcon(theme);
+            },
+            
+            toggleTheme: function() {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                this.setTheme(newTheme);
+            },
+            
+            updateIcon: function(theme) {
+                // Icon luôn là fa-wave-square, không đổi
+                const icon = document.getElementById('themeToggleIcon');
+                if (icon) {
+                    icon.className = 'fa-solid fa-wave-square text-white text-sm';
+                }
+            }
+        };
+        
+        // Initialize theme when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => ThemeManager.init());
+        } else {
+            ThemeManager.init();
+        }
+    </script>
+    
+    <!-- Footer -->
+    <footer class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center">
+        <p class="text-xs text-slate-400">
+            © 2026 <a href="https://ai-box-plus.com/" target="_blank" class="text-indigo-400 hover:text-indigo-300 transition-colors">ai-box-plus.com</a>. Developed by <a href="https://ai-box-plus.com/" target="_blank" class="text-indigo-400 hover:text-indigo-300 transition-colors">Vietnam AI Community</a>.
+        </p>
+    </footer>
+</body>
+</html>
+

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:padding="16dp" android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true">
+    <LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content">
+        <TextView android:textSize="24sp" android:textStyle="bold" android:gravity="center" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="24dp" android:text="Server Configuration"/>
+        <TextView android:textSize="18sp" android:textStyle="bold" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:text="Server Type"/>
+        <RadioGroup android:id="@+id/radioGroupServerType" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="16dp">
+            <RadioButton android:id="@+id/radioServerTypeXiaoZhi" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="XiaoZhi Official Server"/>
+            <RadioButton android:id="@+id/radioServerTypeSelfHost" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Self-Hosted Server"/>
+        </RadioGroup>
+        <TextView android:textSize="18sp" android:textStyle="bold" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:text="Transport Protocol"/>
+        <RadioGroup android:id="@+id/radioGroupTransportType" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="16dp">
+            <RadioButton android:id="@+id/radioTransportMqtt" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="MQTT"/>
+            <RadioButton android:id="@+id/radioTransportWebSocket" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="WebSocket"/>
+        </RadioGroup>
+        <TextView android:textSize="16sp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp" android:text="Endpoint"/>
+        <EditText android:id="@+id/editTextEndpoint" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="16dp" android:minHeight="48dp" android:hint="Enter server endpoint" android:inputType="textUri"/>
+        <TextView android:textSize="16sp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp" android:text="Username"/>
+        <EditText android:id="@+id/editTextUsername" android:visibility="gone" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="16dp" android:minHeight="48dp" android:hint="Enter username" android:inputType="text"/>
+        <TextView android:textSize="16sp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp" android:text="Password"/>
+        <EditText android:id="@+id/editTextPassword" android:visibility="gone" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="16dp" android:minHeight="48dp" android:hint="Enter password" android:inputType="textPassword"/>
+        <TextView android:textSize="16sp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp" android:text="Client ID"/>
+        <EditText android:id="@+id/editTextClientId" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="16dp" android:minHeight="48dp" android:hint="Enter client ID" android:inputType="text"/>
+        <TextView android:textSize="16sp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp" android:text="Publish Topic"/>
+        <EditText android:id="@+id/editTextPublishTopic" android:visibility="gone" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="16dp" android:minHeight="48dp" android:hint="Enter publish topic" android:inputType="text"/>
+        <TextView android:textSize="16sp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp" android:text="Subscribe Topic"/>
+        <EditText android:id="@+id/editTextSubscribeTopic" android:visibility="gone" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="24dp" android:minHeight="48dp" android:hint="Enter subscribe topic" android:inputType="text"/>
+        <TextView android:textSize="14sp" android:id="@+id/textViewStatus" android:visibility="gone" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="16dp"/>
+        <ProgressBar android:layout_gravity="center" android:id="@+id/progressBar" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="16dp"/>
+        <Button android:id="@+id/buttonSubmit" android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="48dp" android:text="Save Configuration"/>
+    </LinearLayout>
+</ScrollView>
