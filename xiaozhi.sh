@@ -3,7 +3,7 @@
 MAC=$(echo "$1" | tr 'A-Z' 'a-z')
 [ -z "$MAC" ] && echo "Usage: $0 <mac>" && exit 1
 
-UUID=$(cat /proc/sys/kernel/random/uuid)
+UUID=$(uuidgen)
 
 RESPONSE=$(wget -qO- \
   --header="Device-Id: $MAC" \
