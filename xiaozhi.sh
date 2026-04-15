@@ -1,38 +1,23 @@
 #!/bin/sh
 
-# ===== INPUT =====
-if [ -z "$1" ]; then
-    echo "Usage: sh xiaozhi.sh <mac_address>"
-    exit 1
-fi
-
 MAC=$(echo "$1" | tr 'A-Z' 'a-z')
+[ -z "$MAC" ] && echo "Usage: $0 <mac>" && exit 1
 
-URL="https://api.tenclass.net/xiaozhi/ota/activate"
-
-# ===== UUID =====
 UUID=$(cat /proc/sys/kernel/random/uuid)
 
-echo "📡 MAC: $MAC"
-echo "🆔 UUID: $UUID"
-
-# ===== CALL API =====
 RESPONSE=$(wget -qO- \
   --header="Device-Id: $MAC" \
   --header="Client-Id: $UUID" \
-  --header="X-Language: Chinese" \
   --header="Content-Type: application/json" \
-  --header="User-Agent: okhttp/3.12.1" \
   --post-data="{\"mac_address\":\"$MAC\",\"uuid\":\"$UUID\"}" \
-  "$URL")
+  https://api.tenclass.net/xiaozhi/ota/activate)
 
 echo "📦 Raw: $RESPONSE"
 
-# ===== PARSE CODE =====
-CODE=$(echo "$RESPONSE" | grep -o '"code":"[^"]*' | cut -d'"' -f4)
+DEVICE_ID=$(echo "$RESPONSE" | grep -o '"device_id":[0-9]*' | cut -d':' -f2)
 
-if [ -n "$CODE" ]; then
-    echo "✅ ACTIVE CODE: $CODE"
+if [ -n "$DEVICE_ID" ]; then
+    echo "✅ DEVICE ID: $DEVICE_ID"
 else
-    echo "❌ Không lấy được code"
+    echo "❌ Không có device_id (có thể API đã thay đổi)"
 fi
