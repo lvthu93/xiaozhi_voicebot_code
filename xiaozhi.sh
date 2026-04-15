@@ -18,4 +18,6 @@ DEVICE_ID=$(echo "$RESPONSE" | grep -o '"device_id":[0-9]*' | cut -d':' -f2)
 
 if [ -n "$DEVICE_ID" ]; then
     echo "✅ DEVICE ID: $DEVICE_ID"
+else
+    echo "❌ Không có device_id (có thể API đã thay đổi)"
 fi
