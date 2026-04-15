@@ -1,6 +1,6 @@
 HƯỚNG DẪN SỬ DỤNG
 ----------------------------------------------------------------------------------------------------------------------------------
-# Nếu bạn đã biết Mac Address thì có thể lấy CODE không cần Loa:
+# Nếu có Mac Address thì có thể lấy CODE không cần Loa:
 
 Command:
 
