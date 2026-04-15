@@ -2,25 +2,21 @@
 
 # ===== INPUT =====
 if [ -z "$1" ]; then
-    echo "Usage: sh script.sh <mac_address>"
+    echo "Usage: sh xiaozhi.sh <mac_address>"
     exit 1
 fi
 
 MAC=$(echo "$1" | tr 'A-Z' 'a-z')
 
-# ===== GENERATE UUID =====
-if command -v uuidgen >/dev/null 2>&1; then
-    UUID=$(uuidgen)
-else
-    UUID=$(cat /proc/sys/kernel/random/uuid)
-fi
-
-echo "MAC: $MAC"
-echo "UUID: $UUID"
-
-# ===== REQUEST =====
 URL="https://api.tenclass.net/xiaozhi/ota/activate"
 
+# ===== UUID =====
+UUID=$(cat /proc/sys/kernel/random/uuid)
+
+echo "📡 MAC: $MAC"
+echo "🆔 UUID: $UUID"
+
+# ===== CALL API =====
 RESPONSE=$(wget -qO- \
   --header="Device-Id: $MAC" \
   --header="Client-Id: $UUID" \
@@ -30,5 +26,13 @@ RESPONSE=$(wget -qO- \
   --post-data="{\"mac_address\":\"$MAC\",\"uuid\":\"$UUID\"}" \
   "$URL")
 
-# ===== OUTPUT =====
-echo "Response: $RESPONSE"
+echo "📦 Raw: $RESPONSE"
+
+# ===== PARSE CODE =====
+CODE=$(echo "$RESPONSE" | grep -o '"code":"[^"]*' | cut -d'"' -f4)
+
+if [ -n "$CODE" ]; then
+    echo "✅ ACTIVE CODE: $CODE"
+else
+    echo "❌ Không lấy được code"
+fi
